@@ -4,25 +4,13 @@
     <title>Flask app with logging</title>
     <script src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
     <script>
-        function highlight(text) {
-            console.log(text);
-            let lowercaseText = text.toLowerCase();
-            if (lowercaseText.includes("error") || lowercaseText.includes("exception")) {
-                return '<span style="background-color: #FFFF00">' + text + '</span>';
-            } else if (lowercaseText.includes("warning")) {
-                return "<mark class='warning_mark'>" + text + "</mark>";
-            } else {
-                return text;
-            }
-        }
         $(document).ready(function () {
             var output = document.getElementById('output');
             var xhr = new XMLHttpRequest();
             xhr.open('GET', '/log_stream/{{ project }}', true);
             xhr.send();
             setInterval(function () {
-                var text = highlight(xhr.responseText);
-                output.innerText = text;
+                output.innerText = xhr.responseText;
             }, 500);
         });
     </script>
