@@ -1,0 +1,39 @@
+<html>
+<head>
+    <link rel="stylesheet" type=text/css href="{{ url_for('static', filename='css/custom.css')}}">
+    <title>Flask app with logging</title>
+    <script src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
+    <script>
+        function highlight(text) {
+            console.log(text);
+            let lowercaseText = text.toLowerCase();
+            if (lowercaseText.includes("error") || lowercaseText.includes("exception")) {
+                return '<span style="background-color: #FFFF00">' + text + '</span>';
+            } else if (lowercaseText.includes("warning")) {
+                return "<mark class='warning_mark'>" + text + "</mark>";
+            } else {
+                return text;
+            }
+        }
+        $(document).ready(function () {
+            var output = document.getElementById('output');
+            var xhr = new XMLHttpRequest();
+            xhr.open('GET', '/log_stream/{{ project }}', true);
+            xhr.send();
+            setInterval(function () {
+                var text = highlight(xhr.responseText);
+                output.innerText = text;
+            }, 500);
+        });
+    </script>
+</head>
+<body id="main">
+<div class="row">
+    <h1 align="center" class="project_name">{{ project }}</h1>
+    <h2 align="center" class="common_labels">logging tail:</h2>
+</div>
+<div class="logging_window">
+    <pre id="output"></pre>
+</div>
+</body>
+</html>
